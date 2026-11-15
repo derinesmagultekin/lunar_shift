@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<!-- saved from url=(0161)file:///Users/beyhangultekin/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/810675E3-13AD-4BA0-8988-D394209B0CEA/lunar_shift_english_only_index.html -->
+<html lang="en" translate="no" class="notranslate"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
+<meta name="description" content="Lunar Shift is a student-built educational Moon-base decision game about life support, radiation shielding, power, and food production.">
+<meta name="ai-use" content="AI was used to assist with the initial HTML/CSS/JavaScript implementation. The team reviewed, selected, and edited the final game logic, wording, and design. No AI-generated images are used.">
+<title>Lunar Shift — Moon Base Decision Game</title>
+<style>
+:root{
+  --bg:#0b0d10;
+  --panel:#14181d;
+  --panel2:#191e24;
+  --line:#2c343d;
+  --text:#f3f5f7;
+  --muted:#aeb7c1;
+  --lime:#c7f36b;
+  --amber:#f2c66d;
+  --red:#ee7c7c;
+  --blue:#8bc8ff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:#0b0d10;
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+button,a{font:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.shell{width:min(1080px,94%);margin:0 auto;padding:20px 0 38px}
+.topbar{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:18px;
+  padding:10px 0 18px;border-bottom:1px solid var(--line)
+}
+.brand small{display:block;color:var(--lime);font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:5px}
+.brand h1{margin:0;font-size:clamp(36px,6vw,66px);line-height:.92;letter-spacing:-.045em}
+.brand p{margin:9px 0 0;color:var(--muted);max-width:640px;line-height:1.45}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.ghost{
+  background:transparent;color:var(--text);border:1px solid var(--line);
+  padding:9px 11px;border-radius:8px
+}
+.ghost:hover{background:var(--panel)}
+.layout{display:grid;grid-template-columns:255px 1fr;gap:16px;margin-top:16px}
+.sidebar,.main{border:1px solid var(--line);background:var(--panel)}
+.sidebar{padding:14px}
+.side-title{
+  font-size:12px;text-transform:uppercase;letter-spacing:.13em;
+  color:var(--muted);margin:0 0 12px
+}
+.resource{margin-bottom:15px}
+.resource-row{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
+.resource-name{font-weight:700}
+.resource-value{font-variant-numeric:tabular-nums}
+.track{height:9px;border:1px solid var(--line);background:#0f1216;overflow:hidden}
+.fill{height:100%;background:var(--lime);transition:width .28s ease}
+.fill.mid{background:var(--amber)}
+.fill.low{background:var(--red)}
+.status-card{
+  border-top:1px solid var(--line);margin-top:18px;padding-top:13px;
+  font-size:12px;line-height:1.5;color:var(--muted)
+}
+.status-card strong{color:var(--text)}
+.history{border-top:1px solid var(--line);margin-top:14px;padding-top:13px}
+.history-item{font-size:11px;color:var(--muted);line-height:1.45;margin:0 0 9px}
+.main{padding:20px;min-height:560px}
+.kicker{color:var(--lime);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.13em;margin-bottom:10px}
+h2{font-size:clamp(28px,5vw,46px);line-height:1.02;letter-spacing:-.025em;margin:0 0 12px}
+.lead{font-size:16px;color:#d7dce2;line-height:1.62;max-width:760px}
+.info-box{
+  background:#11151a;border-left:3px solid var(--amber);padding:12px 13px;
+  color:#cbd2da;font-size:13px;line-height:1.55;margin:18px 0
+}
+.info-box strong{color:var(--text)}
+.objectives{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0
+}
+.objective{border:1px solid var(--line);background:var(--panel2);padding:12px;font-size:13px;line-height:1.45}
+.objective b{display:block;margin-bottom:3px}
+.primary{
+  border:0;background:var(--lime);color:#111;padding:12px 16px;border-radius:8px;
+  font-weight:800
+}
+.primary:hover{filter:brightness(.95)}
+.event-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.event-num{
+  color:var(--muted);border:1px solid var(--line);padding:6px 8px;border-radius:7px;
+  font-size:12px;white-space:nowrap
+}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.choice{
+  text-align:left;color:var(--text);background:#171c22;border:1px solid #3a444f;
+  padding:14px;border-radius:9px;min-height:102px
+}
+.choice:hover{border-color:#75808c;background:#1b2128}
+.choice:disabled{cursor:default;opacity:.48}
+.choice-title{display:block;font-weight:800;margin-bottom:7px}
+.choice-effect{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+.feedback{
+  display:none;margin-top:16px;border:1px solid var(--line);background:#101419;
+  padding:14px;line-height:1.55;color:#d6dce3
+}
+.feedback-title{font-weight:800;color:var(--lime);margin-bottom:5px}
+.next{display:none;width:100%;margin-top:12px;text-align:center}
+.delta{font-weight:800}
+.good{color:var(--lime)} .bad{color:var(--red)}
+.result{text-align:center;padding:34px 8px}
+.result-score{font-size:72px;font-weight:900;line-height:1;margin:10px 0 8px}
+.result-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:20px auto;
+  max-width:720px
+}
+.result-chip{border:1px solid var(--line);background:var(--panel2);padding:11px;font-size:12px}
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:50;
+  padding:20px;overflow:auto
+}
+.modal.open{display:block}
+.modal-card{
+  max-width:780px;margin:30px auto;background:#12161b;border:1px solid var(--line);
+  padding:20px
+}
+.modal-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.modal h3{font-size:25px;margin:0}
+.modal p,.modal li{color:#cbd2da;line-height:1.55;font-size:14px}
+.modal a{color:#9dd3ff}
+.source{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+.footer{
+  color:#7f8995;font-size:11px;line-height:1.55;text-align:center;padding-top:16px
+}
+@media(max-width:760px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{order:2}
+  .main{order:1;min-height:auto}
+  .choices,.objectives{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .topbar{display:block}
+  .top-actions{justify-content:flex-start;margin-top:13px}
+}
+</style>
+</head>
+<body class="notranslate" translate="no">
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">
+      <small>Student prototype</small>
+      <h1>Lunar Shift</h1>
+      <p>A Moon-base decision game about the trade-offs between life support, radiation protection, power and food production.</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost" type="button" onclick="openModal('how')">How it works</button>
+      <button class="ghost" type="button" onclick="openModal('sources')">Sources &amp; AI use</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3 class="side-title">Base systems</h3>
+      <div id="resourceList"><div class="resource">
+      <div class="resource-row">
+        <span class="resource-name">Life Support</span>
+        <span class="resource-value">82/100</span>
+      </div>
+      <div class="track"><div class="fill " style="width:82%"></div></div>
+    </div><div class="resource">
+      <div class="resource-row">
+        <span class="resource-name">Power</span>
+        <span class="resource-value">82/100</span>
+      </div>
+      <div class="track"><div class="fill " style="width:82%"></div></div>
+    </div><div class="resource">
+      <div class="resource-row">
+        <span class="resource-name">Food</span>
+        <span class="resource-value">82/100</span>
+      </div>
+      <div class="track"><div class="fill " style="width:82%"></div></div>
+    </div><div class="resource">
+      <div class="resource-row">
+        <span class="resource-name">Radiation Protection</span>
+        <span class="resource-value">82/100</span>
+      </div>
+      <div class="track"><div class="fill " style="width:82%"></div></div>
+    </div></div>
+
+      <div class="status-card">
+        <strong id="crewStatus">Crew status: Stable</strong><br>
+        <span id="shiftStatus">Shift has not started.</span>
+      </div>
+
+      <div class="history">
+        <h3 class="side-title">Decision log</h3>
+        <div id="historyList"><p class="history-item">Your choices will appear here.</p></div>
+      </div>
+    </aside>
+
+    <main class="main" id="screen">
+    <div class="kicker">Mission briefing</div>
+    <h2>You are taking over one shift at a small lunar outpost.</h2>
+    <p class="lead">Your job is to keep four connected systems working until handover. You will face seven situations. Each choice has a cost, so the goal is not to keep every number at 100 — it is to keep the whole base alive.</p>
+
+    <div class="objectives">
+      <div class="objective"><b>Life Support</b>Protect breathable air, water recovery and basic habitat support.</div>
+      <div class="objective"><b>Power</b>Manage generated and stored electrical energy.</div>
+      <div class="objective"><b>Food</b>Balance stored supplies and small-scale crop production.</div>
+      <div class="objective"><b>Radiation Protection</b>Limit the crew's exposure during risky conditions.</div>
+    </div>
+
+    <div class="info-box"><strong>Rule:</strong> If any system reaches 0, the shift fails. Finish all seven situations with every system above 0 to complete the mission.</div>
+    <button class="primary" onclick="startGame()">Start lunar shift</button>
+  </main>
+  </div>
+
+  <div class="footer">
+    Independent student prototype. No NASA logo, mission patch, flag or AI-generated image is used in this game.
+    Scientific concepts are simplified for educational gameplay.
+  </div>
+</div>
+
+<div class="modal" id="modal-how" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h3>How it works</h3>
+      <button class="ghost" onclick="closeModal('how')">Close</button>
+    </div>
+    <p>You manage four connected systems during one lunar-base shift. Every event gives you two possible actions. Neither option is perfect: saving one resource can put pressure on another.</p>
+    <ul>
+      <li><b>Life Support</b> represents breathable air, water recovery and basic habitat support.</li>
+      <li><b>Power</b> represents stored and generated electrical energy.</li>
+      <li><b>Food</b> represents stored food plus small-scale crop production.</li>
+      <li><b>Radiation Protection</b> represents the crew's protection from space radiation exposure.</li>
+    </ul>
+    <p>If any system reaches 0, the shift ends. Complete all seven events with every system above 0 to finish the mission.</p>
+  </div>
+</div>
+
+<div class="modal" id="modal-sources" aria-hidden="true">
+  <div class="modal-card">
+    <div class="modal-top">
+      <h3>Sources &amp; development notes</h3>
+      <button class="ghost" onclick="closeModal('sources')">Close</button>
+    </div>
+
+    <div class="source">
+      <p><b>NASA Environmental Control and Life Support Systems (ECLSS)</b><br>
+      Used for the game's life-support ideas, including oxygen generation, air revitalization and water recovery.</p>
+      <p><a href="https://www.nasa.gov/reference/environmental-control-and-life-support-systems-eclss/" target="_blank" rel="noopener">Open source</a></p>
+    </div>
+
+    <div class="source">
+      <p><b>NASA Human Research Program — Space Radiation</b><br>
+      Used for solar-particle and radiation-protection events.</p>
+      <p><a href="https://www.nasa.gov/hrp/hazard-space-radiation/" target="_blank" rel="noopener">Open source</a></p>
+    </div>
+
+    <div class="source">
+      <p><b>NASA Moon Base Systems — Power</b><br>
+      Used for lunar power-storage, long-darkness and surface-power trade-offs.</p>
+      <p><a href="https://www.nasa.gov/moonbase-systems/" target="_blank" rel="noopener">Open source</a></p>
+    </div>
+
+    <div class="source">
+      <p><b>AI use disclosure</b><br>
+      AI was used to assist with the initial HTML, CSS and JavaScript implementation and with organizing some wording. The team is expected to review, test, understand and edit the final project before submission. The project concept, final decisions and submitted version remain the team's responsibility. No AI-generated images are used.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const initial = {life:82, power:82, food:82, radiation:82};
+let state = {...initial};
+let eventIndex = -1;
+let choiceLocked = false;
+let history = [];
+
+const resourceMeta = {
+  life:{label:"Life Support", icon:"AIR"},
+  power:{label:"Power", icon:"PWR"},
+  food:{label:"Food", icon:"FOOD"},
+  radiation:{label:"Radiation Protection", icon:"RAD"}
+};
+
+const events = [
+  {
+    title:"Solar particle warning",
+    text:"A solar-particle event is expected soon. The crew can move into the most protected part of the habitat, but keeping that area fully powered will use extra electricity.",
+    science:"Outside Earth's protective magnetic field and atmosphere, space radiation is a serious astronaut hazard. Solar particle events are one source of that risk.",
+    options:[
+      {
+        title:"Move the crew to the protected shelter",
+        effect:{power:-18,radiation:+14},
+        effectText:"Power −18 · Radiation Protection +14",
+        feedback:"You reduced radiation risk, but the shelter and supporting systems used part of the base's stored electrical energy."
+      },
+      {
+        title:"Keep normal operations to save electricity",
+        effect:{power:+5,radiation:-30},
+        effectText:"Power +5 · Radiation Protection −30",
+        feedback:"You preserved electricity, but the crew accepted much more radiation exposure risk during the event."
+      }
+    ]
+  },
+  {
+    title:"Oxygen generation fault",
+    text:"The oxygen-generation system reports unstable output. The cabin is still safe, but the problem needs attention before the reserve margin becomes too small.",
+    science:"NASA life-support systems include oxygen generation and air revitalization. These systems help maintain breathable cabin conditions.",
+    options:[
+      {
+        title:"Stop other equipment and repair it now",
+        effect:{power:-14,life:+20},
+        effectText:"Power −14 · Life Support +20",
+        feedback:"The repair cost electrical power, but restoring oxygen generation improved the base's life-support margin."
+      },
+      {
+        title:"Use emergency reserves and delay the repair",
+        effect:{power:+4,life:-22},
+        effectText:"Power +4 · Life Support −22",
+        feedback:"The base saved power for the moment, but relying on reserves reduced the safety margin of the life-support system."
+      }
+    ]
+  },
+  {
+    title:"Greenhouse circulation problem",
+    text:"A circulation pump in the small food-growth module has stopped. The plants can survive for a while, but food production will fall if the problem continues.",
+    science:"Food production in a remote outpost competes for equipment, power and crew attention. The challenge is to protect future supplies without draining today's resources.",
+    options:[
+      {
+        title:"Use power to repair the greenhouse pump",
+        effect:{power:-16,food:+18},
+        effectText:"Power −16 · Food +18",
+        feedback:"You spent electricity now to protect future food production. This is a classic mission trade-off between immediate energy use and longer-term supplies."
+      },
+      {
+        title:"Reduce greenhouse activity and ration food",
+        effect:{power:+7,food:-24},
+        effectText:"Power +7 · Food −24",
+        feedback:"You saved power, but the base lost part of its food-production capacity and had to rely more heavily on stored food."
+      }
+    ]
+  },
+  {
+    title:"Extended shadow period",
+    text:"The base will spend longer than expected with limited solar generation. Batteries are healthy, but running every system at normal level may drain them too quickly.",
+    science:"NASA's Moon Base Systems work considers generation, storage and distribution of electricity, including the challenge of extended periods of darkness on the lunar surface.",
+    options:[
+      {
+        title:"Switch nonessential systems to low-power mode",
+        effect:{power:+20,food:-7},
+        effectText:"Power +20 · Food −7",
+        feedback:"Reducing electrical loads protected the battery reserve, but the greenhouse had to operate below its preferred level."
+      },
+      {
+        title:"Keep the base at full operating level",
+        effect:{power:-28,food:+5},
+        effectText:"Power −28 · Food +5",
+        feedback:"The crew kept all systems running and protected food production, but the decision used a large amount of stored electricity."
+      }
+    ]
+  },
+  {
+    title:"Water-recovery filter alert",
+    text:"A filter in the water-recovery loop is nearing its service limit. The system still works, but efficiency is starting to fall.",
+    science:"NASA's ECLSS Water Recovery System reclaims wastewater and cabin humidity. Water recovery is closely connected to long-duration life support.",
+    options:[
+      {
+        title:"Service the filter during this shift",
+        effect:{power:-9,life:+17},
+        effectText:"Power −9 · Life Support +17",
+        feedback:"Maintenance used some energy and crew time, but it improved the reliability of a system that supports the crew's water supply."
+      },
+      {
+        title:"Delay maintenance until the next shift",
+        effect:{power:+3,life:-20},
+        effectText:"Power +3 · Life Support −20",
+        feedback:"The base saved resources in the short term, but the life-support margin became smaller because water recovery was left less reliable."
+      }
+    ]
+  },
+  {
+    title:"Greenhouse repair during higher radiation",
+    text:"The greenhouse needs an outside inspection. Radiation conditions are above the team's preferred level, but delaying the repair could reduce food production.",
+    science:"Mission planning often means choosing between competing risks. Here, food production and radiation protection cannot both be maximized at the same time.",
+    options:[
+      {
+        title:"Delay the outside inspection",
+        effect:{food:-18,radiation:+8},
+        effectText:"Food −18 · Radiation Protection +8",
+        feedback:"You protected the crew from extra exposure, but the greenhouse problem continued and food production suffered."
+      },
+      {
+        title:"Perform a short inspection now",
+        effect:{food:+12,radiation:-18,power:-5},
+        effectText:"Food +12 · Radiation Protection −18 · Power −5",
+        feedback:"The greenhouse recovered sooner, but the crew accepted additional radiation risk and used power for the operation."
+      }
+    ]
+  },
+  {
+    title:"Final shift: competing demands",
+    text:"Before the handover, three systems need attention at once: the battery reserve is low, the greenhouse needs heat, and the protected shelter should be kept ready. You cannot maximize all three.",
+    science:"The purpose of the trainer is not to find one perfect answer. It is to show that real mission engineering is built around trade-offs between limited resources and safety.",
+    options:[
+      {
+        title:"Prioritize crew safety and base power",
+        effect:{power:+12,radiation:+10,food:-17},
+        effectText:"Power +12 · Radiation Protection +10 · Food −17",
+        feedback:"You ended the shift with stronger safety and power margins, but accepted a smaller food reserve."
+      },
+      {
+        title:"Prioritize food production and current operations",
+        effect:{food:+15,power:-14,radiation:-10},
+        effectText:"Food +15 · Power −14 · Radiation Protection −10",
+        feedback:"Food production improved, but the base finished the shift with less electrical and radiation-safety margin."
+      }
+    ]
+  }
+];
+
+function clamp(v){ return Math.max(0,Math.min(100,v)); }
+
+function renderResources(){
+  const box=document.getElementById("resourceList");
+  box.innerHTML=Object.entries(state).map(([key,val])=>{
+    let level=val<=25?"low":val<=50?"mid":"";
+    return `<div class="resource">
+      <div class="resource-row">
+        <span class="resource-name">${resourceMeta[key].label}</span>
+        <span class="resource-value">${val}/100</span>
+      </div>
+      <div class="track"><div class="fill ${level}" style="width:${val}%"></div></div>
+    </div>`;
+  }).join("");
+
+  const min=Math.min(...Object.values(state));
+  const crew=document.getElementById("crewStatus");
+  if(min<=0) crew.textContent="Crew status: Mission failure";
+  else if(min<=25) crew.textContent="Crew status: Critical";
+  else if(min<=50) crew.textContent="Crew status: Caution";
+  else crew.textContent="Crew status: Stable";
+
+  document.getElementById("shiftStatus").textContent =
+    eventIndex < 0 ? "Shift has not started." :
+    eventIndex >= events.length ? "Shift complete." :
+    `Decision ${eventIndex+1} of ${events.length}.`;
+}
+
+function renderHistory(){
+  const box=document.getElementById("historyList");
+  if(!history.length){
+    box.innerHTML='<p class="history-item">Your choices will appear here.</p>';
+    return;
+  }
+  box.innerHTML=history.slice().reverse().map(item=>
+    `<p class="history-item"><b>${item.n}. ${item.event}</b><br>${item.choice}</p>`
+  ).join("");
+}
+
+function intro(){
+  eventIndex=-1;
+  document.getElementById("screen").innerHTML=`
+    <div class="kicker">Mission briefing</div>
+    <h2>You are taking over one shift at a small lunar outpost.</h2>
+    <p class="lead">Your job is to keep four connected systems working until handover. You will face seven situations. Each choice has a cost, so the goal is not to keep every number at 100 — it is to keep the whole base alive.</p>
+
+    <div class="objectives">
+      <div class="objective"><b>Life Support</b>Protect breathable air, water recovery and basic habitat support.</div>
+      <div class="objective"><b>Power</b>Manage generated and stored electrical energy.</div>
+      <div class="objective"><b>Food</b>Balance stored supplies and small-scale crop production.</div>
+      <div class="objective"><b>Radiation Protection</b>Limit the crew's exposure during risky conditions.</div>
+    </div>
+
+    <div class="info-box"><strong>Rule:</strong> If any system reaches 0, the shift fails. Finish all seven situations with every system above 0 to complete the mission.</div>
+    <button class="primary" onclick="startGame()">Start lunar shift</button>
+  `;
+  renderResources();renderHistory();
+}
+
+function startGame(){
+  state={...initial};history=[];eventIndex=0;choiceLocked=false;
+  renderResources();renderHistory();renderEvent();
+}
+
+function renderEvent(){
+  if(Object.values(state).some(v=>v<=0)){finish(false);return}
+  if(eventIndex>=events.length){finish(true);return}
+  choiceLocked=false;
+  const ev=events[eventIndex];
+  document.getElementById("screen").innerHTML=`
+    <div class="event-head">
+      <div>
+        <div class="kicker">Lunar shift</div>
+        <h2>${ev.title}</h2>
+      </div>
+      <div class="event-num">${eventIndex+1} / ${events.length}</div>
+    </div>
+    <p class="lead">${ev.text}</p>
+    <div class="info-box"><strong>Science connection:</strong> ${ev.science}</div>
+
+    <div class="choices">
+      ${ev.options.map((o,i)=>`
+        <button class="choice" onclick="choose(${i})">
+          <span class="choice-title">${o.title}</span>
+          <span class="choice-effect">${o.effectText}</span>
+        </button>`).join("")}
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <button class="primary next" id="nextBtn" onclick="nextEvent()">Continue</button>
+  `;
+  renderResources();
+}
+
+function effectSummary(effect){
+  return Object.entries(effect).map(([key,val])=>{
+    const sign=val>0?"+":"";
+    const cls=val>=0?"good":"bad";
+    return `<span class="delta ${cls}">${resourceMeta[key].label} ${sign}${val}</span>`;
+  }).join(" · ");
+}
+
+function choose(index){
+  if(choiceLocked)return;
+  choiceLocked=true;
+  const ev=events[eventIndex], opt=ev.options[index];
+
+  Object.entries(opt.effect).forEach(([key,val])=>state[key]=clamp(state[key]+val));
+  history.push({n:eventIndex+1,event:ev.title,choice:opt.title});
+  renderResources();renderHistory();
+
+  document.querySelectorAll(".choice").forEach((b,i)=>{
+    b.disabled=true;
+    if(i===index)b.style.opacity="1";
+  });
+
+  const fb=document.getElementById("feedback");
+  fb.style.display="block";
+  fb.innerHTML=`<div class="feedback-title">What changed?</div>
+    <div style="margin-bottom:7px">${effectSummary(opt.effect)}</div>
+    ${opt.feedback}`;
+
+  const next=document.getElementById("nextBtn");
+  next.style.display="block";
+  if(Object.values(state).some(v=>v<=0)) next.textContent="See mission result";
+  else if(eventIndex===events.length-1) next.textContent="Finish shift";
+  else next.textContent="Continue to next decision";
+}
+
+function nextEvent(){
+  if(Object.values(state).some(v=>v<=0)){finish(false);return}
+  eventIndex++;
+  if(eventIndex>=events.length)finish(true);
+  else renderEvent();
+}
+
+function finish(success){
+  eventIndex=events.length;
+  renderResources();
+  const avg=Math.round(Object.values(state).reduce((a,b)=>a+b,0)/4);
+  const weak=Object.entries(state).sort((a,b)=>a[1]-b[1])[0];
+  const weakName=resourceMeta[weak[0]].label;
+
+  document.getElementById("screen").innerHTML=`
+    <div class="result">
+      <div class="kicker">${success?"Shift complete":"Mission ended"}</div>
+      <h2>${success?"The crew made it through the shift.":"A critical system reached zero."}</h2>
+      <div class="result-score">${avg}</div>
+      <p class="lead" style="margin:0 auto">Average remaining system level</p>
+
+      <div class="result-grid">
+        ${Object.entries(state).map(([k,v])=>`<div class="result-chip"><b>${resourceMeta[k].label}</b><br>${v}/100</div>`).join("")}
+      </div>
+
+      <div class="info-box" style="text-align:left;max-width:720px;margin:18px auto">
+        <strong>Mission reflection:</strong>
+        ${success
+          ? `You completed all seven decisions. Your lowest remaining system was <b>${weakName}</b>. A different path might improve that system but reduce another one.`
+          : `The mission failed because one connected system could no longer support the crew. Try again and watch how early decisions change later options.`}
+      </div>
+
+      <button class="primary" onclick="startGame()">Try another strategy</button>
+    </div>`;
+}
+
+function openModal(name){
+  const el=document.getElementById("modal-"+name);
+  el.classList.add("open");el.setAttribute("aria-hidden","false");
+}
+function closeModal(name){
+  const el=document.getElementById("modal-"+name);
+  el.classList.remove("open");el.setAttribute("aria-hidden","true");
+}
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    document.querySelectorAll(".modal.open").forEach(m=>{m.classList.remove("open");m.setAttribute("aria-hidden","true")});
+  }
+});
+
+intro();
+</script>
+
+
+</body></html>
